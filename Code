@@ -1,0 +1,64 @@
+from tkinter import *
+import random
+import string
+import pyperclip
+
+root = Tk()
+
+root.iconbitmap(r'C:\Users\Saksham\Downloads\pass.ico')
+root.geometry("350x350")
+root.resizable(0,0)
+Label(root, text ='PASSWORD GENERATOR', font ='arial 15 bold').pack()
+frame=LabelFrame(root,text="",padx=50,pady=50)
+frame.pack(padx=0,pady=0)
+root.title("PASSWORD GENERATOR")
+
+pass_label = Label(frame, text = 'PASSWORD LENGTH', font = 'arial 10 bold' ).pack()
+pass_len = IntVar()
+length = Spinbox(frame, from_ = 8, to_ = 32 , textvariable = pass_len , width = 15,).pack()
+pass_str = StringVar()
+passwordImmutable = StringVar()
+
+def Generator():
+    password = ''
+
+    for x in range (0,4):
+        password = random.choice(string.ascii_uppercase) + random.choice(string.ascii_lowercase) + random.choice(string.digits) + random.choice(string.punctuation)
+    for y in range(pass_len.get()- 4):
+        password = password + random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits + string.punctuation)
+    return password
+    
+def createNewPassword():
+    password = Generator()
+    passwordImmutable.set(password)
+    pass_str.set(password)
+
+Button(frame, text = "GENERATE PASSWORD" , command = createNewPassword ).pack(pady= 5)
+
+Entry(frame , textvariable = pass_str).pack()
+
+def Copy_password():
+    pyperclip.copy(passwordImmutable.get())
+
+def showinfo():
+    pass_str.set(passwordImmutable.get())
+    
+def hideinfo():
+    pass_str.set('*'*len(passwordImmutable.get()))
+
+def clear():
+    
+    pass_str.set("")
+
+pane=Frame(frame)
+pane.pack(fill=BOTH,expand=TRUE)
+
+Button(pane, text='Show Info', command=showinfo).pack(side=LEFT,expand=True,pady=0 ,padx=0)
+Button(pane, text='Hide Info', command=hideinfo).pack(side=LEFT,expand=True,pady=0 ,padx=0)
+Button(pane, text='Clear Info', command=clear).pack(side=LEFT,expand=True,pady=0)
+
+Button(frame, text = 'COPY TO CLIPBOARD', command = Copy_password).pack(pady=5) 
+
+button_quit=Button(root,text="Exit Program",command=root.quit).pack()
+
+root.mainloop()   
